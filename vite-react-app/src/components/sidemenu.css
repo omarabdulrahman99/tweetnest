@@ -1,0 +1,229 @@
+#wrapper {
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  -webkit-transition: all 0.5s ease;
+  padding-left: 0;
+  transition: all 0.5s ease;
+  width: 0px;
+  height: 100%;
+}
+#wrapper.toggled {
+  padding-left: 230px;
+}
+#wrapper.toggled ul {
+  width: calc(100% - 3px);
+  z-index: 999;
+}
+#wrapper.toggled ul a {
+  color: black;
+}
+#wrapper.toggled ul a:hover {
+  color: #dddddd;
+}
+#wrapper.toggled .sidebar-nav {
+  backdrop-filter:blur(29px);
+}
+#wrapper.toggled .sidebar-name a {
+  color: #dddddd;
+}
+#wrapper.toggled button {
+  right: 10px;
+}
+
+#sidebar-wrapper {
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  -webkit-transition: all 0.5s ease;
+  background: #1a1a1a;
+  margin-left: -230px;
+  transition: all 0.5s ease;
+  width: 0;
+  z-index: 1;
+  height: 100%;
+}
+
+.sidebar-nav {
+  container-name: sidebarnavcontainer;
+  container-type: size;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: fixed;
+  top: 0;
+  width: 220px;
+  backdrop-filter:blur(9px);
+  border: 1px solid #d6249f;
+  border-bottom:0;
+  border-top:0;
+  height: 100%;
+  overflow:hidden;
+}
+
+.sidebar-nav > .sidebar-brand {
+  font-size: 20px;
+  height: 285px;
+  background: url("https://i.imgur.com/FadiXCF.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-bottom:9px;
+}
+.sidebar-nav li a:hover, .sidebar-nav li a:active, .sidebar-nav li a:focus {
+  background-color: transparent;
+  color: #ffffff;
+  text-decoration: none;
+}
+.sidebar-nav li {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 9px;
+}
+.sidebar-nav li:before {
+  background-color: #1c1c1c;
+  content: '';
+  height: 100%;
+  left: 16cqi;
+  position: absolute;
+  top: 0;
+  transition: width .2s ease-in;
+  width: 0px;
+  background-image:url("https://i.imgur.com/FadiXCF.png");
+  background-position: 85% 50%;
+  background-repeat: no-repeat;
+}
+.sidebar-brand:before {
+  display: none;
+}
+.sidebar-name::before{
+  display:none;
+}
+.sidebar-name a {
+  font-size: 40px !important;
+  font-family: serif;
+  margin:0;
+}
+.sidebar-nav li a {
+  color: #dddddd;
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+  position: relative;
+  font-size: var(--step-2);
+}
+.sidebar-nav li:last-child {
+  margin-bottom: 0px;
+}
+
+.sidebar-nav li:hover::before {
+  transition: width .2s ease-in;
+  width: calc(16cqi * 4.3);
+}
+
+.hamburger {
+   background: transparent;
+   border: none;
+   display: block;
+   height: 32px;
+   margin-left: 15px;
+   position: fixed;
+   top: 20px;
+   width: 32px;
+   z-index: 999;
+}
+ .hamburger:hover, .hamburger:focus, .hamburger:active {
+   outline: none;
+}
+
+ .hamburger.is-closed::before {
+   -webkit-transform: translate3d(0,0,0);
+   -webkit-transition: all .35s ease-in-out;
+   color: #ffffff;
+   content: '';
+   display: block;
+   font-size: 14px;
+   line-height: 32px;
+   opacity: 0;
+   text-align: center;
+   width: 100px;
+}
+ .hamburger.is-closed:hover::before {
+   -webkit-transform: translate3d(-100px,0,0);
+   -webkit-transition: all .35s ease-in-out;
+   display: block;
+   opacity: 1;
+}
+ .hamburger.is-closed:hover .hamb-top {
+   -webkit-transition: all .35s ease-in-out;
+   top: 0;
+}
+ .hamburger.is-closed:hover .hamb-bottom {
+   -webkit-transition: all .35s ease-in-out;
+   bottom: 0;
+}
+.hamburger.is-closed .hamb-top {
+   -webkit-transition: all .35s ease-in-out;
+   background-color: white;
+   top: 5px;
+}
+.hamburger.is-closed .hamb-middle {
+   background-color: white;
+   margin-top: -2px;
+   top: 50%;
+}
+.hamburger.is-closed .hamb-bottom {
+   -webkit-transition: all .35s ease-in-out;
+   background-color: white;
+   bottom: 5px;
+}
+.hamb-top, .hamb-middle, .hamb-bottom {
+   height: 4px;
+   left: 0;
+   position: absolute;
+   width: 100%;
+}
+ .hamburger.is-open .hamb-top {
+   -webkit-transform: rotate(45deg);
+   -webkit-transition: -webkit-transform .2s cubic-bezier(.73,1,.28,.08);
+   background-color: white;
+   margin-top: -2px;
+   top: 50%;
+}
+ .hamburger.is-open .hamb-middle {
+   background-color: white ;
+   display: none;
+}
+ .hamburger.is-open .hamb-bottom {
+   -webkit-transform: rotate(-45deg);
+   -webkit-transition: -webkit-transform .2s cubic-bezier(.73,1,.28,.08);
+   background-color: white ;
+   margin-top: -2px;
+   top: 50%;
+}
+.hamburger.is-open:before {
+   -webkit-transform: translate3d(0,0,0);
+   -webkit-transition: all .35s ease-in-out;
+   color: #ffffff;
+   content: '';
+   display: block;
+   font-size: 14px;
+   line-height: 32px;
+   opacity: 0;
+   text-align: center;
+   width: ;
+}
+.hamburger.is-open:hover before {
+   -webkit-transform: translate3d(-100px,0,0);
+   -webkit-transition: all .35s ease-in-out;
+   display: block;
+   opacity: 1;
+}
+  @container sidebarnavcontainer (max-height: 560px) {
+    .sidebar-nav li a {
+      padding: 0;
+    }
+    .sidebar-nav .sidebar-brand {
+      margin-bottom: 20px;
+    }
+  }

@@ -1,0 +1,114 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Urbanist:wght@500&display=swap");
+
+ul {
+  list-style: none;
+}
+.dropdown {
+  width: 288px;
+  height: 64px;
+  background: white;
+  border-radius: 9px;
+  box-shadow: 0 10px 25px rgba(42, 179, 248, 0.4);
+  position: relative;
+}
+@media (max-width: 400px) {
+  .dropdown {
+    width: 240px;
+  }
+}
+.dropdown::before {
+  content: "";
+  position: absolute;
+  right: 10px;
+  top: 24px;
+  z-index: 1;
+  width: 12px;
+  height: 12px;
+  border: 2px solid grey;
+  border-top: transparent;
+  border-right: transparent;
+  transform: rotate(-45deg);
+  pointer-events: none;
+  transition: all 0.3s linear;
+}
+.dropdown input {
+  width: 100%;
+  height: 100%;
+  border-radius: 9px;
+  padding-left: 15px;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  box-shadow: 0 10px 25px rgba(124, 130, 141, 0.2);
+  border: 2px solid purple;
+  font-size: 20px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  user-select: none;
+}
+.dropdown .options {
+  width: 100%;
+  border-radius: 9px;
+  padding: 8px;
+  cursor: pointer;
+  background: white;
+  border: none;
+  outline: none;
+  box-shadow: 0 10px 25px rgba(124, 130, 141, 0.2);
+  font-size: 20px;
+  overflow: hidden;
+  position: absolute;
+  top: 65px;
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: translateY(-50px);
+  visibility: hidden;
+  border: 2px solid purple;
+  z-index: 2;
+}
+.dropdown .options .option {
+  padding: 16px;
+  border-radius: 9px;
+  transition: all 0.2s ease;
+  color: #292d34;
+}
+.dropdown .option.disabled {
+  pointer-events: none;
+  color: gray;
+  text-decoration: line-through;
+}
+.dropdown .options .option:not(:last-of-type) {
+  margin-bottom: 8px;
+}
+.dropdown .options .option:hover {
+  color: white;
+  background: #5bc5fa;
+  box-shadow: 0 10px 25px rgba(42, 179, 248, 0.4);
+}
+.dropdown.opened .options {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+
+}
+.dropdown.opened::before {
+  transform: rotate(-225deg);
+  top: 30px;
+}
+.wrapper {
+  position: relative;
+}
+@media (max-width: 575px) {
+  .circle.one {
+    width: 160px;
+    height: 160px;
+    left: -40px;
+  }
+}
+@media (max-width: 400px) {
+  .circle.one {
+    display: none;
+  }
+}
