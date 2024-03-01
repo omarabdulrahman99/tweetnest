@@ -76,7 +76,7 @@ const addMedia = asyncHandler(async(req, res) => {
 		case 'league':
 			const mediauserinfo = await needle('get', `https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${media_name}`, {}, {
 				headers: {
-					"X-Riot-Token": "RGAPI-f99926e3-4c72-480e-a8fb-eb2a06470c56"
+					"X-Riot-Token": process.env.RIOT_TOKEN
 				}
 			});
 			setMediaId = mediauserinfo.body.puuid;
@@ -175,7 +175,7 @@ const getMediaDetails = asyncHandler(async(req, res) => {
 				clicks: user.media.league.values[i].clicks,
 				mediauserinfo: () => needle('get', `https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/${user.media[req.query.media_type].values[i].media_id}`, {}, {
 				headers: {
-					"X-Riot-Token": "RGAPI-f99926e3-4c72-480e-a8fb-eb2a06470c56"
+					"X-Riot-Token": process.env.RIOT_TOKEN
 				}
 			})
 		});
@@ -199,7 +199,7 @@ const getMediaDetails = asyncHandler(async(req, res) => {
   	for(let i = 0; i < detailarray.length; i++) {
   		detailarray[i].matchinfo = () => needle('get', `https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/${detailarray[i].mediauserinfo.puuid}/ids?start=0&count=5`, {}, {
 				headers: {
-					"X-Riot-Token": "RGAPI-f99926e3-4c72-480e-a8fb-eb2a06470c56"
+					"X-Riot-Token": process.env.RIOT_TOKEN
 				}
 			})
   	}
@@ -212,7 +212,7 @@ const getMediaDetails = asyncHandler(async(req, res) => {
 				const matchid = detailarray[i].matchinfo[j];
 				detailarray[i].matchinfo[j] = (() => needle('get', constants.media_types('league', matchid), {}, {
 					headers: {
-						"X-Riot-Token": "RGAPI-f99926e3-4c72-480e-a8fb-eb2a06470c56"
+						"X-Riot-Token": process.env.RIOT_TOKEN
 					}
 				})
 				);
@@ -307,7 +307,7 @@ const getMediaGraphCounts = asyncHandler(async(req, res) => {
 	  			clicks: mo.clicks,
 					name: () => needle('get', `https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/${mo.media_id}`, {}, {
 					headers: {
-						"X-Riot-Token": "RGAPI-f99926e3-4c72-480e-a8fb-eb2a06470c56"
+						"X-Riot-Token": process.env.RIOT_TOKEN
 					}
 				})
 	  		});
