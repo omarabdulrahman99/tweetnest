@@ -70,7 +70,8 @@ body{
       height: 75%;
       flex-grow: 0;
       display: flex;
-      min-width: $menu-width;
+      width: 98%;
+      padding: 15px;
       align-items: center;
       justify-content: left;
       .refreshing-data {
@@ -94,14 +95,15 @@ body{
         li.item {
             position: relative;
             display: grid;
-            grid-template-columns: 10px 1fr;
+            grid-template-columns: 1fr 1fr;
             margin-bottom: 17px;
            .mediaicon {
               height: 50px;
               width: 50px;
-              margin-left: 30px;
+              margin-right: 20px;
               border-radius: 100%;
               border: 1px solid purple;
+              justify-self: end;
            }
            &:hover [data-icon="pencil"], &:hover [data-icon="trash-can"]{
              display: block;
@@ -127,10 +129,12 @@ body{
            input[type="radio"] {
             display: none;
             & ~ label {
+              width: 100%;
               display: block;
               opacity: 0.5;
               height: 50px;
-              text-align: center;
+              text-align: start;
+              justify-self: start;
               line-height: 50px;
               border-right: solid 4px white;
               &:first-letter {
@@ -246,7 +250,7 @@ body{
         }
         .teamstats {
           display: grid;
-          grid-template-columns: 1.5fr 1fr 1fr 1fr 1.5fr;
+          grid-template-columns: 180px 1fr 1fr 1fr 180px;
           grid-template-rows: repeat(7, 1fr);
           justify-items: center;
           .participants1 {
@@ -355,8 +359,19 @@ body{
       margin-top: 50px;
       grid-template-columns: 1fr;
       grid-template-rows: 1fr 1fr;
+      #right-zone .content .teamstats {
+        grid-template-columns: 180px 1fr 180px;
+        grid-template-rows: repeat(14, 1fr);
+        .participants1 {
+          grid-area: 7/1/14/1;
+        }
+        .participants2 {
+          grid-area: 7/3/14/4;
+        }
+      }
     }
   }
+  
   @container mediascontainer (max-width: 1000px) {
 
   }

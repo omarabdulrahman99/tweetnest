@@ -222,7 +222,6 @@ export default function Carousel() {
 	         (
 			      <li className={checkAfterEdit(i+1)} key={i}>
 			        <input type="radio" id=""/>
-			        <span></span>
 			        <label className={checkSelectMedia(i+1)} onClick={() => {setEditables({ ...editables, [i+1]: true }); setActiveMatch(1); setSelectedMedia(i+1); matchLabelsArr.length = 0;}}>
 			        	<FontAwesomeIcon icon={faCirclePlus} />
 			        </label>
