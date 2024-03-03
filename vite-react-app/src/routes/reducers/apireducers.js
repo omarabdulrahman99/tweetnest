@@ -16,7 +16,7 @@ const baseQuery = (baseQueryOptions) => async (args, api, extraOptions) => {
 
 export const api = createApi({
 	baseQuery: baseQuery({
-		baseUrl: `${process.env.NODE_ENV === 'production' ? 'https://tweetnest.onrender.com': ''}/api/`,
+		baseUrl: `${process.env.NODE_ENV === 'production' ? 'https://tweetnest.onrender.com': 'http://localhost:5000'}/api/`,
 		prepareHeaders: (headers, { getState }) => {
 			const token = getState().auth.token;
 			if(token) {

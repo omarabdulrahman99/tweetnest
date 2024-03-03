@@ -67,18 +67,14 @@ body{
     border: 2px solid purple;
     #left-zone {
       position: relative;
-      height: 75%;
       flex-grow: 0;
       display: flex;
       width: 98%;
       padding: 15px;
       align-items: center;
       justify-content: left;
+      flex-direction: column;
       .refreshing-data {
-        position: absolute;
-        left: 50%;
-        top: -15%;
-        transform: translate(-50%, 0);
         width: 500px;
         height: 100px;
         display: flex;
@@ -92,10 +88,11 @@ body{
         flex-grow: 1;
         margin: 0;
         padding: 0;
+        width: 100%;
         li.item {
             position: relative;
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: .8fr 1fr;
             margin-bottom: 17px;
            .mediaicon {
               height: 50px;
@@ -134,7 +131,7 @@ body{
               opacity: 0.5;
               height: 50px;
               text-align: start;
-              justify-self: start;
+              justify-self: center;
               line-height: 50px;
               border-right: solid 4px white;
               &:first-letter {
@@ -143,7 +140,11 @@ body{
               &:hover {
                 opacity: 0.75;
                 cursor: pointer;
-              }          
+              }
+              &.noMedia {
+                grid-column: span 2;
+                text-align: center;
+             }         
             }
           }
          .selected {
@@ -185,7 +186,7 @@ body{
           }
           [data-icon="arrow-right"], .addmedialoading {
             position: absolute;
-            right:1.3em;
+            right: 10%;
             top: 13px;
             color: green;
             cursor: pointer;
@@ -357,8 +358,8 @@ body{
   @container carouselcontainer (max-width: 1000px) {
     #scene {
       margin-top: 50px;
-      grid-template-columns: 1fr;
-      grid-template-rows: 1fr 1fr;
+      grid-template-columns: minmax(510px, 1fr);
+      grid-template-rows: 600px 1fr;
       #right-zone .content .teamstats {
         grid-template-columns: 180px 1fr 180px;
         grid-template-rows: repeat(14, 1fr);

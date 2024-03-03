@@ -57,8 +57,9 @@ export default function Carousel() {
       {"It's very engaging. Right?"}
     </React.Fragment>
 	)
-	const checkSelectMedia = (medianame) => {
-		return selectedMedia === medianame ? `${medianame} selected` : medianame;
+	const checkSelectMedia = (medianame, noMediaClass = '') => {
+		const classmedia = selectedMedia === medianame ? `${medianame} selected ${noMediaClass}` : `${medianame} ${noMediaClass}`;
+		return classmedia;
 	}
 	const checkAfterEdit = (deleteindex) => {
 		return afteredit[deleteindex] ? ' item isDeleting' : 'item';
@@ -222,7 +223,7 @@ export default function Carousel() {
 	         (
 			      <li className={checkAfterEdit(i+1)} key={i}>
 			        <input type="radio" id=""/>
-			        <label className={checkSelectMedia(i+1)} onClick={() => {setEditables({ ...editables, [i+1]: true }); setActiveMatch(1); setSelectedMedia(i+1); matchLabelsArr.length = 0;}}>
+			        <label className={checkSelectMedia(i+1, 'noMedia')} onClick={() => {setEditables({ ...editables, [i+1]: true }); setActiveMatch(1); setSelectedMedia(i+1); matchLabelsArr.length = 0;}}>
 			        	<FontAwesomeIcon icon={faCirclePlus} />
 			        </label>
 			      </li>
@@ -231,8 +232,7 @@ export default function Carousel() {
 				contentArr.push(
 		    	<div className={`content ${selectedMedia === (i+1) ? 'animate' : ''}`}>
 	        	<span className="picto"></span>
-	          <h1>Adding more soon</h1>
-	          <p>Adding more soon</p>
+	          <h1>No data</h1>
 	        </div>
 				);
 			}
