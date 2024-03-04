@@ -102,7 +102,8 @@ body{
               border: 1px solid purple;
               justify-self: end;
            }
-           &:hover [data-icon="pencil"], &:hover [data-icon="trash-can"]{
+           &:hover [data-icon="pencil"], &:hover [data-icon="trash-can"], &:active [data-icon="pencil"],
+           &:active [data-icon="trash-can"]{
              display: block;
            }
            &.isDeleting {
