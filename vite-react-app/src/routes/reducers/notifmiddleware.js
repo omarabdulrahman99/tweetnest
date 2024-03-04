@@ -35,7 +35,6 @@ const notificationMiddleware =
     ({ dispatch }) =>
     (next) =>
     (action) => {
-        console.log(action);
         if (action.meta) {
             const {
                 requestStatus = "",

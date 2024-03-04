@@ -6,7 +6,6 @@ const baseQuery = (baseQueryOptions) => async (args, api, extraOptions) => {
   const result = await fetchBaseQuery(baseQueryOptions)(args, api, extraOptions);
 	//https://redux-toolkit.js.org/rtk-query/usage/customizing-queries
   if (result.error && result.error.data && result.error.data.status === 401) {
-  	console.log(result);
     // if unauthorized error, then logout, so delete token api.dispatch
     api.dispatch(setToken(null));
   }

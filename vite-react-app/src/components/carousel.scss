@@ -52,7 +52,7 @@ body{
   #scene {
     position: relative;
     display: grid;
-    grid-template-columns: 360px 1fr;
+    grid-template-columns: 360px minmax(510px, 1fr);
     grid-template-rows: 1fr;
     gap: 5px;
     align-items: center;
@@ -152,7 +152,7 @@ body{
          }
          .notifCount {
             position: absolute;
-            left: 20px;
+            left: 70px;
             top: -10px;
             color: white;
             background-color: #d60049;
@@ -292,6 +292,9 @@ body{
         animation-fill-mode: forwards;
         animation-timing-function: cubic-bezier(0.455, 0.03, 0.515, 0.955);
         text-align: center;
+        h1 {
+          position: absolute;
+        }
       }
 
       /** selector **/
@@ -359,7 +362,7 @@ body{
     #scene {
       margin-top: 50px;
       grid-template-columns: minmax(510px, 1fr);
-      grid-template-rows: 600px 1fr;
+      grid-template-rows: 600px minmax(510px, 1fr);
       #right-zone .content .teamstats {
         grid-template-columns: 180px 1fr 180px;
         grid-template-rows: repeat(14, 1fr);
@@ -370,10 +373,9 @@ body{
           grid-area: 7/3/14/4;
         }
       }
+      #left-zone .list li.item .notifCount {
+        left: 135px;
+      }
     }
-  }
-  
-  @container mediascontainer (max-width: 1000px) {
-
   }
 }

@@ -5,7 +5,7 @@ export const notifSlice = createSlice({
   name: "notif",
   initialState,
   reducers: {
-    sendNotif: (state, action) => {state.sendNotif = action.payload; console.log(state.sendNotif)},
+    sendNotif: (state, action) => {state.sendNotif = action.payload;},
   },
 });
 
