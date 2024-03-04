@@ -21,6 +21,10 @@ const router = createBrowserRouter([
     path: "/",
     element: <Rootlayout />, //shared by all separate pages.
     children: [{
+      path:"*",
+      element: <div>3214d6e9-553a-449d-8639-4d914a367963</div>
+      },
+      {
       path: "/", //can use same path as rootlayout
       element: <Home />,
       loader: homeLoader,
@@ -50,10 +54,6 @@ const router = createBrowserRouter([
       path:"/signup",
       element: <SignUp />
     },
-    {
-      path:"/riot.txt",
-      element: <div>3214d6e9-553a-449d-8639-4d914a367963</div>
-    }
   ]},
 ]);
 
