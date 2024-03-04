@@ -170,9 +170,9 @@ body{
         li.itemedit {
           display: grid;
           grid-template-columns: 1fr;
-          margin-bottom: 7px;
+          margin-bottom: 17px;
           height: 52px;
-          margin: 0 auto 7px auto;
+          margin: 0 auto 17px auto;
           position: relative;
           width: 80%;
           &.isDeleting {
@@ -362,20 +362,27 @@ body{
   @container carouselcontainer (max-width: 1000px) {
     #scene {
       margin-top: 50px;
-      grid-template-columns: minmax(510px, 1fr);
+      grid-template-columns: minmax(435px, 1fr);
       grid-template-rows: 600px minmax(510px, 1fr);
-      #right-zone .content .teamstats {
-        grid-template-columns: 180px 1fr 180px;
-        grid-template-rows: repeat(14, 1fr);
-        .participants1 {
-          grid-area: 7/1/14/1;
+      #right-zone {
+        .section-navigate__item {
+          width: 80px;
         }
-        .participants2 {
-          grid-area: 7/3/14/4;
+        .content .teamstats {
+          grid-template-columns: 150px 1fr 150px;
+          grid-template-rows: repeat(14, 1fr);
+          .participants1 {
+            grid-area: 7/1/14/1;
+            margin-left: 90px
+          }
+          .participants2 {
+            grid-area: 7/3/14/4;
+            margin-right: 90px
+          }
         }
       }
       #left-zone .list li.item .notifCount {
-        left: 135px;
+        left: 105px;
       }
     }
   }
