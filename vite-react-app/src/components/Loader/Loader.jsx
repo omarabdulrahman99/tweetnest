@@ -5,7 +5,7 @@ export default function Loader(props) {
 	return (
 		<div className="loader-container">
 			<div className="loader-title" style={{ fontSize: props.titleFontSize }}>{props.message || 'Gathering your medias' }</div>
-			<div className="loader-dots" style={{ width: props.dotsWidth }}></div>
+			<div className="loader-dots" style={{ width: props.dotsWidth }} data-testid="loader-dots"></div>
 		</div>
 	);
 }

@@ -80,10 +80,17 @@ export const api = createApi({
 				return [{ type: 'Medias', id: args.media_id }]
 			},*/ // causes race condition if multiple invalidates in a row in our case.
 		}),
+		sharePost: builder.mutation({
+			query: (shareObj) => ({
+				url: 'sharedPosts/postSharedPost',
+				method: 'POST',
+				body: shareObj,
+			}),
+		})
 	})
 });
 
-export const { useLoginMutation, useLazyCurrentUserQuery, useRegisterMutation, useLazyMediasQuery, useLazyUpdateLastCheckDate, useAddMediaMutation, useDeleteMediaMutation } = api;
+export const { useLoginMutation, useLazyCurrentUserQuery, useRegisterMutation, useLazyMediasQuery, useLazyUpdateLastCheckDate, useAddMediaMutation, useDeleteMediaMutation, useSharePostMutation } = api;
 
 //how to access api data, you get it only through the subscription call 'useLoginMutation' { data, isLoading, }?
 //how does the id refetch work. so each useLoginMutation call, if it has different parameters, it will create it's own data instance.

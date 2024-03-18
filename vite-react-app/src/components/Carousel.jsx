@@ -5,7 +5,8 @@ import { useLazyMediasQuery, useAddMediaMutation, useDeleteMediaMutation } from 
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import { styled } from '@mui/material/styles';
 import Select from './Select';
-import Loader from './Loader';
+import Loader from './Loader/Loader';
+import DialogModal from './DialogModal/DialogModal';
 import './carousel.scss';
 //onClick radio button input.
 // absolute position remove.
@@ -40,6 +41,9 @@ export default function Carousel() {
 	const [isRefreshing, setIsRefreshing] = useState(false);
 	const [afteredit, setAfterEdit] = useState({ 1: false, 2: false, 3: false, 4: false, 5: false });
 	const [toolTipId, setToolTipId] = useState(null);
+	const [shareModal, setShareModal] = useState(false);
+	const [mediaShareInfo, setMediaShareInfo] = useState(null);
+
 	useEffect(() => {
 		getMedias({ sortBy: 'name', sortOrder: 'asc', media_type: mediaType }).unwrap().then((fulfilled) => {
 		});
@@ -48,6 +52,9 @@ export default function Carousel() {
 	useEffect(() => {
 		setIsRefreshing(false);
 		setAfterEdit({ 1: false, 2: false, 3: false, 4: false, 5: false });
+		if (data.length > 0) {
+			setMediaShareInfo({ media_id: data[0].mediauserinfo.puuid, media_post_id: data[0].matchinfo[0].match_id });
+		}
 	}, [data]);
 	const participantTooltipData = (participant) => (
     <React.Fragment>
@@ -182,6 +189,7 @@ export default function Carousel() {
 			        		onClick={() => {
 			        			setSelectedMedia(i+1);
 			        			setActiveMatch(1);
+			        			setMediaShareInfo({ media_id: data[i].mediauserinfo.puuid, media_post_id: data[i].matchinfo[i].match_id });
 			        		}}
 			      	 	>
 			      	 		{data[i].mediauserinfo.name}
@@ -222,7 +230,7 @@ export default function Carousel() {
 	         (
 			      <li className={checkAfterEdit(i+1)} key={i}>
 			        <input type="radio" id=""/>
-			        <label className={checkSelectMedia(i+1, 'noMedia')} onClick={() => {setEditables({ ...editables, [i+1]: true }); setActiveMatch(1); setSelectedMedia(i+1); matchLabelsArr.length = 0;}}>
+			        <label className={checkSelectMedia(i+1, 'noMedia')} onClick={() => {setEditables({ ...editables, [i+1]: true }); setActiveMatch(1); setSelectedMedia(i+1); matchLabelsArr.length = 0; setMediaShareInfo(null);}}>
 			        	<FontAwesomeIcon icon={faCirclePlus} />
 			        </label>
 			      </li>
@@ -239,7 +247,12 @@ export default function Carousel() {
 		if (data[selectedMedia - 1]) {
 			for (let i = 0; i < data[selectedMedia - 1].matchinfo.length; i++) {
 				matchLabelsArr.push(
-					<div className="section-navigate__item" onClick={(e) => setActiveMatch(i+1)}>
+					<div
+						className="section-navigate__item" 
+						onClick={(e) => {
+							setActiveMatch(i+1);
+							setMediaShareInfo({ media_id: data[selectedMedia - 1].mediauserinfo.puuid, media_post_id: data[selectedMedia - 1].matchinfo[activeMatch - 1].match_id });
+						}}>
 		        <span id={i+1} className={`section-navigate__link js--navigate-link ${activeMatch == (i+1) && 'is--active'}`}>
 		        </span>
 		        <span className="section-navigate__name">Match {i+1}</span>
@@ -258,12 +271,13 @@ export default function Carousel() {
 			      </ul>
 			    </div>
 			    <div id="right-zone">
+			    	{matchLabelsArr.length > 0 ? <button onClick={() => setShareModal(Date.now())} className="shareMatch">Share Match</button> : ''}
 						<nav className="section-navigate js--navigate">
 					    <div className="section-navigate__items js--navigate-items">
 					    	{matchLabelsArr}
 					    </div>
 						</nav>
-			    	{contentArr}
+					{contentArr}
 			    </div></>) : <Loader />
 		return (
 		  <div id="scene">
@@ -276,6 +290,10 @@ export default function Carousel() {
 		<div className="carousel-layout">
 			<Select setMediaType={setMediaType}/>
 			{listLabels()}
+			<DialogModal 
+				open={shareModal} 
+				mediaShareInfo={{...mediaShareInfo, media_type: mediaType }}
+				onClose={() => setShareModal(false)} />
 		</div>
 	);
 }

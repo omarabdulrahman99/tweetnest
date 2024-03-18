@@ -225,8 +225,45 @@ body{
       height: 100%;
       width: 100%;
       display: grid;
-      grid-template-rows: 60px 1fr;
+      grid-template-rows: 50px 60px 1fr;
       background-color: pink;
+      .shareMatch {
+        background-color: transparent;
+        position: relative;
+        color: black;
+        border-radius: unset;
+        border-color: #d500f9;
+        border-width: 2px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        width: 150px;
+        height: 50px;
+        font-size: var(--step--2);
+        margin-top: 3px;
+        margin-left: 3px;
+        clip-path: polygon(0 0, 100% 0, 100% calc(100% - 1rem + 2px), calc(100% - 1rem + 2px) 100%, 0 100%);
+        filter: drop-shadow(1px 1px 1px gray);
+      }
+      .shareMatch::before {
+        background-color: #d500f9;
+        content: "";
+        display: block;
+        height: 23px;
+        position: absolute;
+        right: 5px;
+        top: 29px;
+        transform: rotate(45deg);
+        width: 2px;
+        z-index: 100;   
+      }
+      .shareMatch:hover {
+        color: #d500f9;
+
+      }
+      .shareMatch:active {
+        transform: translate(2px, 2px);
+        background-color: #1d1e22;
+      }
       .content {
         display: none;
         top: -$scene-height;
