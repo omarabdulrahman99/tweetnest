@@ -128,8 +128,7 @@ const getSharedPosts = asyncHandler(async(req, res) => {
 })
 
 const postSharedPost = asyncHandler(async(req, res) => {
-	const { media_post_id, anon_share, notes, media_type, media_id } = req.body;
-
+	const { media_post_id, anon_share = false, notes, media_type, media_id } = req.body;
 	// check how many posts posted today from start of day today. 10 shares max.
 	const previousDay = new Date();
 	previousDay.setDate(previousDay.getDate() - 1);

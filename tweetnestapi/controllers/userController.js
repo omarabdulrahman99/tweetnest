@@ -210,12 +210,12 @@ const getMediaDetails = asyncHandler(async(req, res) => {
 		for(let i = 0; i < detailarray.length; i++) {
 			for(let j = 0; j < detailarray[i].matchinfo.length; j++) {
 				const matchid = detailarray[i].matchinfo[j];
-				detailarray[i].matchinfo[j] = (() => needle('get', constants.media_types('league', matchid), {}, {
+				detailarray[i].matchinfo[j] = [(() => needle('get', constants.media_types('league', matchid), {}, {
 					headers: {
 						"X-Riot-Token": process.env.RIOT_TOKEN
 					}
 				})
-				);
+				), matchid];
 		}}
 		/**
   	const results4 = 
@@ -232,8 +232,8 @@ const getMediaDetails = asyncHandler(async(req, res) => {
 	  		detailarray.map((da, index) => {
 				  	return da.matchinfo.map((c, index2) => {
 				  		results4promises.push(function cpromise() {
-					  		return c().then(t => {
-					  			detailarray[index].matchinfo[index2] = constants.detailsreturn('league', t.body.info);
+					  		return c[0]().then(t => {
+					  			detailarray[index].matchinfo[index2] = { ...constants.detailsreturn('league', t.body.info), match_id:c[1] };
 					  		})
 				  		})
 				  	}
