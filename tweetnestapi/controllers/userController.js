@@ -71,6 +71,7 @@ const loginUser = asyncHandler(async(req, res) => {
 const addMedia = asyncHandler(async(req, res) => {
 	const { media_type, media_name } = req.body;
 	let setMediaId = null;
+	let actualMediaName;
 	// need to retrive puuid from summoner name and add that. media_name for display name to sort by purposes.
 	switch(media_type) {
 		case 'league':
@@ -80,6 +81,7 @@ const addMedia = asyncHandler(async(req, res) => {
 				}
 			});
 			setMediaId = mediauserinfo.body.puuid;
+			actualMediaName = mediauserinfo.body.name;
 			break;
 	}
 	if(!setMediaId) {
@@ -96,7 +98,7 @@ const addMedia = asyncHandler(async(req, res) => {
 		await user.save();
 		**/
 		const templateString = `media.${media_type}.values`;
-		const user = await User.findOneAndUpdate({ _id: req.user._id }, { "$push": { [templateString]: { media_id: setMediaId, media_name, date_added: Date.now(), clicks:0 } } });
+		const user = await User.findOneAndUpdate({ _id: req.user._id }, { "$push": { [templateString]: { media_id: setMediaId, media_name: actualMediaName, date_added: Date.now(), clicks:0 } } });
 		const usercheck = await User.findById(req.user._id);
 		res.status(200).json({ user: usercheck });
 	} else {
@@ -131,7 +133,6 @@ const updateClicks = asyncHandler(async(req, res) => {
 const deleteMedia = asyncHandler(async(req, res) => {
 	const { media_id, media_type } = req.body;
 	const queryMedia = `media.${media_type}.values`;
-	console.log(media_id);
 	try {
 	  const userawait = await User.findOneAndUpdate(
       { _id: req.user._id },
@@ -139,7 +140,6 @@ const deleteMedia = asyncHandler(async(req, res) => {
 	  );
 		const afteruser = await User.findById(req.user._id);
 		const mediaExists = afteruser.media[media_type].values.find(media => media_id === media.media_id);
-		console.log(mediaExists);
 		if (!mediaExists) {
 			res.status(200).json({ message: 'successfully deleted' });
 		} else {

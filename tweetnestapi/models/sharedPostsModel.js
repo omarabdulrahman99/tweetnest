@@ -10,6 +10,10 @@ const sharedPostsSchema = mongoose.Schema({
 			type: String,
 			required: [true, "Please add the display name"],
 		},
+		name: {
+			type: String,
+			required: [true, "Please add the name"],
+		},
 		media_id: { //mediaid is the profile link. like an instagram profile
 			type: String,
 			required: [true, "Please add the media id"],

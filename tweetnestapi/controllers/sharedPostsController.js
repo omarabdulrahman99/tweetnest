@@ -4,6 +4,7 @@ const needle = require('needle');
 const aws = require('@aws-sdk/client-s3');
 const presigner = require('@aws-sdk/s3-request-presigner');
 const constants = require('./constants');
+const User = require("../models/userModel");
 
 const s3 = new aws.S3Client({
 	credentials: {
@@ -11,6 +12,40 @@ const s3 = new aws.S3Client({
 		secretAccessKey: process.env.SECRET_ACCESS_KEY,
 	},
 	region: process.env.BUCKET_REGION,
+});
+
+const getTopFiveStats = asyncHandler(async(req, res) => {
+	try {
+		const sharedMediaCount = {};
+		// list of sharedposts, count each media_id.
+		const posts = await SharedPosts.find({ media_type: req.query.media_type });
+		const postCounts = posts.reduce((agg, post) => {
+			agg[post.name] = (agg[post.name] || 0) + 1;
+			return agg;
+		}, {});
+		const postsResult = Object.entries(postCounts)
+		  .map(([name, count]) => ({ name, count }))
+		  .sort((a, b) => b.count - a.count)
+		  .slice(0, 5);
+		// loop through each user's profiles and count.
+		const users = await User.find();
+		// loop users with mediatype obj, loop values store count in obj
+		const usersCount = users.reduce((agg, userobj) => {
+			userobj.media[req.query.media_type].values.forEach((mediaobj) => {
+				agg[mediaobj.media_name] = (agg[mediaobj.media_name] || 0) + 1;
+			});
+			return agg;
+		}, {});
+		const usersResult = Object.entries(usersCount)
+			.map(([name, count]) => ({ name, count }))
+			.sort((a, b) => b.count - a.count)
+			.slice(0, 5);
+
+	res.status(201).json({ postsResult, usersResult });
+	} catch (err) {
+		res.status(400);
+		throw new Error(err);
+	}
 });
 
 const getUserSharedPosts = asyncHandler(async(req, res) => {
@@ -128,19 +163,18 @@ const getSharedPosts = asyncHandler(async(req, res) => {
 })
 
 const postSharedPost = asyncHandler(async(req, res) => {
-	const { media_post_id, anon_share = false, notes, media_type, media_id } = req.body;
+	const { media_post_id, anon_share = false, notes, media_type, media_id, name } = req.body;
 	// check how many posts posted today from start of day today. 10 shares max.
 	const previousDay = new Date();
 	previousDay.setDate(previousDay.getDate() - 1);
 	const dayposts = await SharedPosts.find({ user_id: req.user._id, createdAt: {$gte: previousDay} });
-
 	if (dayposts.length >= 10) {
 		throw new Error('Too many posts past 24hrs, 10 max.');
 		return res.status(400);
 	}
-
 	try {
 		const contact = await SharedPosts.create({
+			name,
 			display_name: req.user.display_name,
 			media_id, //media profile id in case its needed for lookup.
 			media_post_id, // to use to retrieve the link's posts details freshly
@@ -184,4 +218,4 @@ const updateLikes = asyncHandler(async(req, res) => {
 	res.status(201).json(postupdate);
 });
 
-module.exports = { getSharedPosts, postSharedPost, getUserSharedPosts, updateLikes };
+module.exports = { getSharedPosts, postSharedPost, getUserSharedPosts, updateLikes, getTopFiveStats };
