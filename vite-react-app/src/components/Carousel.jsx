@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCirclePlus, faArrowRight, faCircleXmark, faCircleLeft, faPencil, faTrashCan } from '@fortawesome/free-solid-svg-icons';
-import { useLazyMediasQuery, useAddMediaMutation, useDeleteMediaMutation } from '../routes/reducers/apireducers';
+import { faCirclePlus, faArrowRight, faCircleXmark, faCircleLeft, faPencil, faTrashCan, faCrown } from '@fortawesome/free-solid-svg-icons';
+import { useLazyMediasQuery, useAddMediaMutation, useDeleteMediaMutation, useLazyGetTopFiveStatsQuery } from '../routes/reducers/apireducers';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import { styled } from '@mui/material/styles';
 import Select from './Select';
@@ -33,6 +33,7 @@ export default function Carousel() {
 	const [selectedMedia, setSelectedMedia] = useState(1);
 	const [editables, setEditables] = useState({ 1: false, 2: false, 3: false, 4: false, 5: false });
 	const [getMedias, { data = initialMediasArrRef, isLoading, error, refetch }] = useLazyMediasQuery(); //using 'lazy' wont trigger 'load' if invalidation tag
+	const [gettopfivestats, { data: topfivestatsdata }] = useLazyGetTopFiveStatsQuery();
 	const [addMedia, { data: addMediaData = [], isLoading: isAddMediaLoading }] = useAddMediaMutation();
 	const [deleteMedia] = useDeleteMediaMutation();
 	const [mediaType, setMediaType] = useState('league');
@@ -43,9 +44,11 @@ export default function Carousel() {
 	const [toolTipId, setToolTipId] = useState(null);
 	const [shareModal, setShareModal] = useState(false);
 	const [mediaShareInfo, setMediaShareInfo] = useState(null);
-
 	useEffect(() => {
 		getMedias({ sortBy: 'name', sortOrder: 'asc', media_type: mediaType }).unwrap().then((fulfilled) => {
+		});
+		gettopfivestats({ media_type: mediaType }).unwrap().then((fulfilled) => {
+			console.log(fulfilled);
 		});
 	}, [])
 
@@ -53,7 +56,7 @@ export default function Carousel() {
 		setIsRefreshing(false);
 		setAfterEdit({ 1: false, 2: false, 3: false, 4: false, 5: false });
 		if (data.length > 0) {
-			setMediaShareInfo({ media_id: data[0].mediauserinfo.puuid, media_post_id: data[0].matchinfo[0].match_id });
+			setMediaShareInfo({ name: data[0].mediauserinfo.name, media_id: data[0].mediauserinfo.puuid, media_post_id: data[0].matchinfo[0].match_id });
 		}
 	}, [data]);
 	const participantTooltipData = (participant) => (
@@ -189,7 +192,7 @@ export default function Carousel() {
 			        		onClick={() => {
 			        			setSelectedMedia(i+1);
 			        			setActiveMatch(1);
-			        			setMediaShareInfo({ media_id: data[i].mediauserinfo.puuid, media_post_id: data[i].matchinfo[i].match_id });
+			        			setMediaShareInfo({ name: data[i].mediauserinfo.name, media_id: data[i].mediauserinfo.puuid, media_post_id: data[i].matchinfo[i].match_id });
 			        		}}
 			      	 	>
 			      	 		{data[i].mediauserinfo.name}
@@ -251,7 +254,7 @@ export default function Carousel() {
 						className="section-navigate__item" 
 						onClick={(e) => {
 							setActiveMatch(i+1);
-							setMediaShareInfo({ media_id: data[selectedMedia - 1].mediauserinfo.puuid, media_post_id: data[selectedMedia - 1].matchinfo[activeMatch - 1].match_id });
+							setMediaShareInfo({ name: data[selectedMedia - 1].mediauserinfo.name, media_id: data[selectedMedia - 1].mediauserinfo.puuid, media_post_id: data[selectedMedia - 1].matchinfo[activeMatch - 1].match_id });
 						}}>
 		        <span id={i+1} className={`section-navigate__link js--navigate-link ${activeMatch == (i+1) && 'is--active'}`}>
 		        </span>
@@ -286,8 +289,40 @@ export default function Carousel() {
 
 		)
 	}
+	const displayTopFives = () => {
+		let displaytopfivessharedjsx = [];
+		let displaytopfivessavedjsx = [];
+		if(topfivestatsdata) {
+			displaytopfivessharedjsx = [...topfivestatsdata.postsResult.map((obj) => {
+				return <span style={{ paddingRight: '15px'}}> {obj.name}:{obj.count}</span>
+			})];
+			displaytopfivessavedjsx = [...topfivestatsdata.usersResult.map((obj) => {
+				return <span style={{ paddingRight: '15px'}}> {obj.name}:{obj.count}</span>
+			})];
+		} else {
+			return (
+			<div className="topfiveshared">
+				<div className="topfivedata"><span>Loading Data</span></div>
+			</div>
+			)
+		}
+		return (
+			<>
+				<FontAwesomeIcon icon={faCrown} />
+				<div className="topfiveshared">
+					<div className="topfivetitle">TOP FIVE PROFILES SHARED: </div>
+					<div className="topfivedata"><span>{displaytopfivessharedjsx}</span></div>
+				</div>
+				<div className="topfivesaved">
+					<div className="topfivetitle">TOP FIVE PROFILES SAVED: </div>
+					<div className="topfivedata"><span>{displaytopfivessavedjsx}</span></div>
+				</div>
+			</>
+		);
+	}
 	return (
 		<div className="carousel-layout">
+			{displayTopFives()}
 			<Select setMediaType={setMediaType}/>
 			{listLabels()}
 			<DialogModal 

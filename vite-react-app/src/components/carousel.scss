@@ -48,6 +48,56 @@ body{
     align-content: center;
     align-items: center;
     grid-gap: 20px;
+    [data-icon="crown"] {
+      color: yellow;
+      height:50px;
+    }
+
+    .topfiveshared, .topfivesaved {
+      border:1px solid #5d2322;
+      background-color: #1e181e;
+      border-radius: 3px;
+      padding: 0.5rem 0.75rem;
+      > div {
+            overflow: hidden;
+            white-space: nowrap;
+            color: white;
+            &.topfivetitle {
+              animation: showuptopfive 7s;
+            }
+            &.topfivedata {
+              width: 0px;
+              animation: revealtopfive 7s forwards;
+              >span {
+                margin-left:-355px;
+                animation: slideintopfive 7s forwards;
+              }
+            }
+            @keyframes showuptopfive {
+                0% {opacity:0;}
+                20% {opacity:1;}
+            }
+
+            @keyframes slideintopfive {
+                0% { margin-left:-800px; }
+                20% { margin-left:-400px; }
+                30% { margin-left:0px; }
+                100% { margin-left:0px;}
+            }
+
+            @keyframes revealtopfive {
+                0% {opacity:0;width:0px;}
+                20% {opacity:1;width:0px;}
+                30% {width:100%;}
+                100% {width:100%;}
+            }
+          }
+           .topfivetitle {
+              padding-bottom: 5px;
+              font-weight: bold;
+              color: #d500f9;
+            }
+    }
   }
   #scene {
     position: relative;
@@ -397,6 +447,10 @@ body{
     }
   }
   @container carouselcontainer (max-width: 1000px) {
+    .topfivedata > span {
+      display: flex;
+      flex-direction: column;
+    }
     #scene {
       margin-top: 50px;
       grid-template-columns: minmax(435px, 1fr);

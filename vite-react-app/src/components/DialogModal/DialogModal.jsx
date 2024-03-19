@@ -28,7 +28,7 @@ export default function DialogModal(props) {
 		    },
 		  }}
 		 >
-			<textarea name="sharenotes" type="textarea" className="notes" value={shareNotes} onChange={(e) => setShareNotes(e.target.value)}maxlength="250" placeholder="Why do you wish to share this match?: "/>
+			<textarea name="sharenotes" type="textarea" className="notes" value={shareNotes} onChange={(e) => setShareNotes(e.target.value)} maxLength="250" placeholder="Why do you wish to share this match?: "/>
 			<div className="footerbuttons"><button className="shareMatch" disabled={isLoading} onClick={() => {setOpenModal(false); sendSharePost({ ...props.mediaShareInfo, notes: shareNotes })}}>Share</button><button className="shareMatch cancel" onClick={() => setOpenModal(false)}>Cancel</button></div>
 		</Dialog>
 	)

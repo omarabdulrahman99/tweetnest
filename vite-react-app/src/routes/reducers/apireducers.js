@@ -25,7 +25,7 @@ export const api = createApi({
 			return headers;
 		}
 	}),
-	tagTypes: ['Medias'],
+	tagTypes: ['Medias', 'TopFive'],
 	endpoints: (builder) => ({
 		login: builder.mutation({
 			query: (credentials) => ({
@@ -67,7 +67,7 @@ export const api = createApi({
 				method: 'POST',
 				body: mediaobj,
 			}),
-			invalidatesTags: ['Medias'],
+			invalidatesTags: ['Medias', 'TopFive'],
 		}),
 		deleteMedia: builder.mutation({
 			query: (delObj) => ({
@@ -75,6 +75,7 @@ export const api = createApi({
 				method: 'POST',
 				body: delObj,
 			}),
+			invalidatesTags: ['TopFive']
 			/*
 			invalidatesTags: (result, error, args) => {
 				return [{ type: 'Medias', id: args.media_id }]
@@ -86,11 +87,16 @@ export const api = createApi({
 				method: 'POST',
 				body: shareObj,
 			}),
-		})
+			invalidatesTags: ['TopFive'],
+		}),
+		getTopFiveStats: builder.query({
+			query: ({ media_type }) => `sharedPosts/getTopFiveStats?media_type=${media_type}`,
+			providesTags: ['TopFive'],
+		}),
 	})
 });
 
-export const { useLoginMutation, useLazyCurrentUserQuery, useRegisterMutation, useLazyMediasQuery, useLazyUpdateLastCheckDate, useAddMediaMutation, useDeleteMediaMutation, useSharePostMutation } = api;
+export const { useLoginMutation, useLazyCurrentUserQuery, useRegisterMutation, useLazyMediasQuery, useLazyUpdateLastCheckDate, useAddMediaMutation, useDeleteMediaMutation, useSharePostMutation, useLazyGetTopFiveStatsQuery } = api;
 
 //how to access api data, you get it only through the subscription call 'useLoginMutation' { data, isLoading, }?
 //how does the id refetch work. so each useLoginMutation call, if it has different parameters, it will create it's own data instance.

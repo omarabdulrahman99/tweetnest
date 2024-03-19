@@ -20,6 +20,7 @@
   container-name: mediascontainer;
   container-type: inline-size;
   margin-top: 120px;
+  margin-bottom: 120px;
 }
 .loginlayout {
   position: relative;
