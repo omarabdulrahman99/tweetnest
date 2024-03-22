@@ -7,6 +7,7 @@ import { styled } from '@mui/material/styles';
 import Select from './Select';
 import Loader from './Loader/Loader';
 import DialogModal from './DialogModal/DialogModal';
+import Radial from './Radial';
 import './carousel.scss';
 //onClick radio button input.
 // absolute position remove.
@@ -15,7 +16,7 @@ import './carousel.scss';
 // if you click on plus, show empty input. if hit enter, if input has something, call api to search for league user, green arrow hit to call. red X to exit.
 // to remove edit mode. green arrow available to be clicked on only if input has something. both icons replaced by loading 
 // if no input, return to plus sign.
-const initialMediasArrRef = []; // to avoid reinstantiation
+const initialMediasArrRef = {}; // to avoid reinstantiation
 const HtmlTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} />
 ))(({ theme }) => ({
@@ -48,15 +49,14 @@ export default function Carousel() {
 		getMedias({ sortBy: 'name', sortOrder: 'asc', media_type: mediaType }).unwrap().then((fulfilled) => {
 		});
 		gettopfivestats({ media_type: mediaType }).unwrap().then((fulfilled) => {
-			console.log(fulfilled);
 		});
 	}, [])
 
 	useEffect(() => {
 		setIsRefreshing(false);
 		setAfterEdit({ 1: false, 2: false, 3: false, 4: false, 5: false });
-		if (data.length > 0) {
-			setMediaShareInfo({ name: data[0].mediauserinfo.name, media_id: data[0].mediauserinfo.puuid, media_post_id: data[0].matchinfo[0].match_id });
+		if (data.detailarray && data.detailarray.length > 0) {
+			setMediaShareInfo({ name: data.detailarray[0].mediauserinfo.name, media_id: data.detailarray[0].mediauserinfo.puuid, media_post_id: data.detailarray[0].matchinfo[0].match_id });
 		}
 	}, [data]);
 	const participantTooltipData = (participant) => (
@@ -165,10 +165,10 @@ export default function Carousel() {
 		const contentArr = [];
 		const matchLabelsArr = [];
 		for (let i=0;i <5; i++){
-			if (data[i]) {
+			if (data.detailarray && data.detailarray[i]) {
 				listArr.push(
 	        editables[i+1] ? (
-		        	<li className="itemedit" key={i} data-mediaid={data[i].mediauserinfo.puuid}>
+		        	<li className="itemedit" key={i} data-mediaid={data.detailarray[i].mediauserinfo.puuid}>
 		        		<FontAwesomeIcon icon={faCircleLeft} onClick={() => setEditables({ ...editables, [i+1]: false })}/>
 			        	<input id="lol" ref={inputCallback} className="medialabelinput" type="text" placeholder="Edit media name" onChange={e => setInputValues({ ...inputValues, [`input${i+1}`]: e.target.value })}></input>
 			        	<FontAwesomeIcon icon={faArrowRight} onClick={async (e) => {
@@ -183,19 +183,19 @@ export default function Carousel() {
 		        	</li>
 	        	)
 	        	: (
-	        		<li className={checkAfterEdit(i+1)} key={i} data-mediaid={data[i].mediauserinfo.puuid}>
+	        		<li className={checkAfterEdit(i+1)} key={i} data-mediaid={data.detailarray[i].mediauserinfo.puuid}>
 				        <input type="radio" id={i}/>
-				        {data[i].notifCount > 0 ? <div className="notifCount">{data[i].notifCount}</div> : null}
-				        <img className={data[i].notifCount > 0 ? `mediaicon notifborder` : 'mediaicon'} src={data[i].mediauserinfo.profilelink}></img>
+				        {data.detailarray && data.detailarray[i].notifCount > 0 ? <div className="notifCount">{data.detailarray[i].notifCount}</div> : null}
+				        <img className={data.detailarray[i].notifCount > 0 ? `mediaicon notifborder` : 'mediaicon'} src={data.detailarray[i].mediauserinfo.profilelink}></img>
 			        	<label
 			        		className={checkSelectMedia(i+1)}
 			        		onClick={() => {
 			        			setSelectedMedia(i+1);
 			        			setActiveMatch(1);
-			        			setMediaShareInfo({ name: data[i].mediauserinfo.name, media_id: data[i].mediauserinfo.puuid, media_post_id: data[i].matchinfo[i].match_id });
+			        			setMediaShareInfo({ name: data.detailarray[i].mediauserinfo.name, media_id: data.detailarray[i].mediauserinfo.puuid, media_post_id: data.detailarray[i].matchinfo[i].match_id });
 			        		}}
 			      	 	>
-			      	 		{data[i].mediauserinfo.name}
+			      	 		{data.detailarray[i].mediauserinfo.name}
 			      	 	</label>
 			      	 	<FontAwesomeIcon icon={faPencil} onClick={() => setEditables({ ...editables, [i+1]: true })}/>
 			      	 	<FontAwesomeIcon icon={faTrashCan} onClick={(e) => {
@@ -210,7 +210,7 @@ export default function Carousel() {
 				);
 				contentArr.push(
 		    	<div className={`content ${selectedMedia === (i+1) ? 'animate' : ''}`}>
-		    		{rightZoneDisplay(mediaType, data[i])}
+		    		{rightZoneDisplay(mediaType, data.detailarray[i])}
 	        </div>
 				);
 			} else {
@@ -247,14 +247,14 @@ export default function Carousel() {
 				);
 			}
 		}
-		if (data[selectedMedia - 1]) {
-			for (let i = 0; i < data[selectedMedia - 1].matchinfo.length; i++) {
+		if (data.detailarray && data.detailarray[selectedMedia - 1]) {
+			for (let i = 0; i < data.detailarray[selectedMedia - 1].matchinfo.length; i++) {
 				matchLabelsArr.push(
 					<div
 						className="section-navigate__item" 
 						onClick={(e) => {
 							setActiveMatch(i+1);
-							setMediaShareInfo({ name: data[selectedMedia - 1].mediauserinfo.name, media_id: data[selectedMedia - 1].mediauserinfo.puuid, media_post_id: data[selectedMedia - 1].matchinfo[activeMatch - 1].match_id });
+							setMediaShareInfo({ name: data.detailarray[selectedMedia - 1].mediauserinfo.name, media_id: data.detailarray[selectedMedia - 1].mediauserinfo.puuid, media_post_id: data.detailarray[selectedMedia - 1].matchinfo[activeMatch - 1].match_id });
 						}}>
 		        <span id={i+1} className={`section-navigate__link js--navigate-link ${activeMatch == (i+1) && 'is--active'}`}>
 		        </span>
@@ -320,9 +320,28 @@ export default function Carousel() {
 			</>
 		);
 	}
+	const displayRadialData = () => {
+		let display = null;
+		switch(mediaType) {
+		case 'league':
+				display = <div className="radialdata">
+										<span className="radialwin">
+											<h1>Wins with Ally champions</h1>
+											<Radial data={data.radialdata?.allychamps.slice(0, 10) || []} />
+										</span>
+										<span className="radiallose">
+											<h1>Losses against Enemy champions</h1>
+											<Radial data={data.radialdata?.enemychamps.slice(0, 10) || []} barColor="pink" />
+										</span>
+									</div>
+			break;
+		};
+		return display;
+	};
 	return (
 		<div className="carousel-layout">
 			{displayTopFives()}
+			{displayRadialData()}
 			<Select setMediaType={setMediaType}/>
 			{listLabels()}
 			<DialogModal 

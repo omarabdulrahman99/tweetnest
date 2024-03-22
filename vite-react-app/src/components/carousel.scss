@@ -52,7 +52,21 @@ body{
       color: yellow;
       height:50px;
     }
-
+    .radialdata {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      .radialwin, .radiallose {
+        display: flex;
+        flex-direction: column;
+        width: 550px;
+        gap: 50px;
+        h1 {
+          height: 50px;
+          text-align: center;
+          color: white;
+        }
+      }
+    }
     .topfiveshared, .topfivesaved {
       border:1px solid #5d2322;
       background-color: #1e181e;
@@ -446,10 +460,17 @@ body{
       /** selector end **/
     }
   }
-  @container carouselcontainer (max-width: 1000px) {
+  @container carouselcontainer (max-width: 1120px) {
     .topfivedata > span {
       display: flex;
       flex-direction: column;
+    }
+    .carousel-layout .radialdata {
+        display: grid;
+        justify-content: center;
+        grid-template-rows: 1fr 1fr;
+        grid-template-columns: 1fr;
+        width: 405px;
     }
     #scene {
       margin-top: 50px;
