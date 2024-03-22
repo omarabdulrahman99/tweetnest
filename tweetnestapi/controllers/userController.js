@@ -272,7 +272,49 @@ const getMediaDetails = asyncHandler(async(req, res) => {
 				}
 			}
 		}
-  		res.status(201).json(detailarray)
+		// const wins = ['zac': 5]  const losses = ['zoe': 8];
+		// get radial bar data, from detail array. loop through detailarray, each user has 5 matches, find user in array of match, if he is
+		// in there, loop through place all champs in wins array.
+
+
+		const radialdata = detailarray.reduce((agg, user) => {
+			// find user in winning team
+			user.matchinfo.forEach((match) => {
+				if (match.team1.participants.find((u) => u.puuid === user.puuid)) {
+					if (match.team1.win) {
+						// save your ally champs in allychamps wins.
+						match.team1.participants.forEach((p) => {
+							agg.allychamps[p.championName] = (agg.allychamps[p.championName] || 0) + 1;
+						})
+					} else {
+						// save enemy champs in enemy champs wins.
+						match.team2.participants.forEach((p) => {
+							agg.enemychamps[p.championName] = (agg.enemychamps[p.championName] || 0) + 1;
+						})
+					}
+				} else {
+					if (match.team1.win) {
+						// save your ally champs in allychamps wins.
+						match.team1.participants.forEach((p) => {
+							agg.enemychamps[p.championName] = (agg.enemychamps[p.championName] || 0) + 1;
+						})
+					} else {
+						// save enemy champs in enemy champs wins.
+						match.team2.participants.forEach((p) => {
+							agg.allychamps[p.championName] = (agg.allychamps[p.championName] || 0) + 1;
+						})
+					}
+				}
+			});
+			return agg;
+		}, { allychamps: {}, enemychamps: {} });
+		radialdata.allychamps = Object.entries(radialdata.allychamps)
+			.map(([name, count]) => ({ name, count }))
+			.sort((a, b) => b.count - a.count);
+		radialdata.enemychamps = Object.entries(radialdata.enemychamps)
+			.map(([name, count]) => ({ name, count }))
+			.sort((a, b) => b.count - a.count);
+  		res.status(201).json({ detailarray, radialdata })
 		break;
 	case 'instagram':
 		break;
