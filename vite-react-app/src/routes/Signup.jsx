@@ -148,7 +148,7 @@ export default function Signup() {
 
 	const checkExistingField = async (field, value) => {
 		const uicheck = validateFields(field, value);
-    const res = await fetch(`/api/users/checkExistingField?field=${field}&value=${value}`, {
+    const res = await fetch(`${process.env.NODE_ENV === 'production' ? 'https://tweetnest.onrender.com': 'http://localhost:5000'}/api/users/checkExistingField?field=${field}&value=${value}`, {
       headers: {
         "Content-Type": "application/json", //need this or it wont show object props in nodejs console
       },
