@@ -330,7 +330,7 @@ export default function Carousel() {
 											<Radial data={data.radialdata?.allychamps.slice(0, 10) || []} />
 										</span>
 										<span className="radiallose">
-											<h1>Losses against Enemy champions</h1>
+											<h1>Losses vs. Enemy champions</h1>
 											<Radial data={data.radialdata?.enemychamps.slice(0, 10) || []} barColor="pink" />
 										</span>
 									</div>

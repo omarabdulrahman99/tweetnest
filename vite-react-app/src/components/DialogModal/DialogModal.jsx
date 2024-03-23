@@ -24,7 +24,7 @@ export default function DialogModal(props) {
 		      width: '550px',
 		      display: 'flex',
 		      alignItems: 'center',
-		      border: '2px solid purple',
+		      border: '4px solid purple',
 		    },
 		  }}
 		 >

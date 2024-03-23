@@ -7,6 +7,7 @@ import { Text } from "@visx/text";
 
 const getLetter = (d) => d.name;
 const getLetterFrequency = (d) => Number(d.count) * 100;
+const toRadians = (x) => (x * Math.PI) / 180;
 const toDegrees = (x) => (x * 180) / Math.PI;
 const margin = { top: 20, bottom: 20, left: 20, right: 20 };
 
@@ -20,7 +21,7 @@ export default function Radial({
   // bounds
   const xMax = width - margin.left - margin.right;
   const yMax = height - margin.top - margin.bottom;
-  const radiusMax = Math.min(xMax, yMax) / 2;
+  const radiusMax = Math.min(xMax, yMax) / 2.5;
 
   const innerRadius = radiusMax / 3;
   const xDomain = data.map(getLetter);
@@ -36,6 +37,19 @@ export default function Radial({
 
   return width < 10 ? null : (
     <>
+      <div className="controls">
+        <label>
+          <strong>Rotate</strong>&nbsp;
+          <input
+            type="range"
+            min="0"
+            max="360"
+            value={toDegrees(rotation)}
+            onChange={(e) => setRotation(toRadians(Number(e.target.value)))}
+          />
+          &nbsp;{toDegrees(rotation).toFixed(0)}°
+        </label>
+      </div>
       <svg width={width} height={height}>
         <GradientLightgreenGreen id="radial-bars-green" />
         <rect
@@ -44,7 +58,7 @@ export default function Radial({
           fill="transparent"
           rx={14}
         />
-        <Group top={yMax / 2 + margin.top} left={xMax / 2 + margin.left}>
+        <Group key="lol2" top={yMax / 2 + margin.top} left={xMax / 2 + margin.left}>
           {data.map((d) => {
             const letter = getLetter(d);
             const startAngle = xScale(letter);
@@ -78,6 +92,7 @@ export default function Radial({
                   fontWeight="bold"
                   fill={barColor}
                   angle={toDegrees(midAngle)}
+                  key={`lol-${letter+d.count}`}
                 >
                   {letter.concat(' ', d.count)}
                 </Text>
@@ -86,12 +101,6 @@ export default function Radial({
           })}
         </Group>
       </svg>
-      <style jsx>{`
-        .controls {
-          font-size: 14px;
-          line-height: 1.5em;
-        }
-      `}</style>
     </>
   );
 }

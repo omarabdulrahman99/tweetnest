@@ -15,7 +15,7 @@
   z-index: 999;
 }
 #wrapper.toggled ul a {
-  color: black;
+  color: purple;
 }
 #wrapper.toggled ul a:hover {
   color: #dddddd;
